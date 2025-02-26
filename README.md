@@ -1,89 +1,60 @@
-📖 UC2 - REST Controller with Database Connectivity
+UC3: Introducing DTO and Model
 
-📌 Overview
+Overview
 
-This use case focuses on creating a REST Controller to demonstrate various HTTP methods while establishing MySQL database connectivity in the Address Book Spring Application. The goal is to ensure proper data transmission through REST API calls.
+This use case introduces DTO (Data Transfer Object) and Model to the Address Book App. The goal is to separate data representation from data processing while keeping the API structured.
 
-🛠️ 1. Spring Boot Project Setup
+Project Setup
 
-Use Spring Initializr (start.spring.io) to generate a Spring Boot project.
+Ensure you have Java 17+ installed.
 
-Include the following dependencies:
+Use Spring Boot with the following dependencies:
 
-Spring Web (for REST APIs)
+Spring Web
 
-Spring Boot Starter Data JPA (for database connectivity)
+Spring Boot DevTools
 
-MySQL Driver (for MySQL integration)
+Implementation Details
 
-Download and extract the generated project.
+1️⃣ Create the Model (Contact.java)
 
-🗄️ 2. MySQL Database Configuration
+Represents the stored contact details.
 
-Create a MySQL database using:
+Fields: id, name, email, phone.
 
-CREATE DATABASE address_book_db;
+Uses Getters and Setters instead of Lombok.
 
-Configure database credentials in src/main/resources/application.properties:
+2️⃣ Create the DTO (ContactDTO.java)
 
-spring.datasource.url=jdbc:mysql://localhost:3306/address_book_db
+Used for data transfer between layers.
 
-spring.datasource.username=root
+Fields: name, email, phone (excludes id).
 
-spring.datasource.password=your_password
+3️⃣ Create the Controller (DTOContactController.java)
 
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+Implements REST APIs using ResponseEntity.
 
-spring.jpa.hibernate.ddl-auto=update
+Manages a list of Contact objects.
 
-spring.jpa.show-sql=true
+API Endpoints and Testing (Using CURL)
 
-🌍 3. Implementing REST Controller
+📌 Fetch All Contacts
 
-Create a Contact entity with fields like id, name, email, phoneNumber.
+curl -X GET http://localhost:8080/addressbook/dto/contacts/get/all
 
-Create a JPA Repository to interact with the database.
+📌 Add a New Contact
 
-Implement a REST Controller with the following endpoints:
+curl -X POST http://localhost:8080/addressbook/dto/contacts/add -H "Content-Type: application/json" -d '{"name":"John Doe","email":"john@example.com","phone":"1234567890"}'
 
-GET /contacts → Fetch all contacts
+📌 Fetch a Contact by ID
 
-GET /contacts/{id} → Fetch contact by ID
+curl -X GET http://localhost:8080/addressbook/dto/contacts/get/1
 
-POST /contacts → Add a new contact
+📌 Update a Contact
 
-PUT /contacts/{id} → Update a contact by ID
+curl -X PUT http://localhost:8080/addressbook/dto/contacts/update/1 -H "Content-Type: application/json" -d '{"name":"Jane Doe","email":"jane@example.com","phone":"9876543210"}'
 
-DELETE /contacts/{id} → Delete a contact
+📌 Delete a Contact
 
-🧪 4. Testing REST API Using CURL
+curl -X DELETE http://localhost:8080/addressbook/dto/contacts/delete/1
 
-➡️ Fetch all contacts
-
-curl -X GET http://localhost:8080/contacts
-
-➡️ Fetch contact by ID
-
-curl -X GET http://localhost:8080/contacts/1
-
-➡️ Add a new contact
-
-curl -X POST http://localhost:8080/contacts -H "Content-Type: application/json" -d '{"name": "John Doe", "email": "john@example.com", "phoneNumber": "9876543210"}'
-
-➡️ Update a contact by ID
-
-curl -X PUT http://localhost:8080/contacts/1 -H "Content-Type: application/json" -d '{"name": "John Updated", "email": "john.updated@example.com", "phoneNumber": "1234567890"}'
-
-➡️ Delete a contact
-
-curl -X DELETE http://localhost:8080/contacts/1
-
-✅ Summary
-
-✔️ Set up Spring Boot with MySQL
-
-✔️ Configured database properties
-
-✔️ Created REST Controller with CRUD operations
-
-✔️ Tested REST API using CURL commands
