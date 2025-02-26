@@ -1,60 +1,67 @@
-UC3: Introducing DTO and Model
+📖 Address Book App - UC4: Introducing Services Layer
+📝 Overview
+In this update, we introduce the Service Layer to manage the Model and separate concerns from the Controller Layer. Now, the Controller will delegate business logic to the Service Layer, making the application more modular and maintainable.
 
-Overview
-
-This use case introduces DTO (Data Transfer Object) and Model to the Address Book App. The goal is to separate data representation from data processing while keeping the API structured.
-
-Project Setup
-
-Ensure you have Java 17+ installed.
-
-Use Spring Boot with the following dependencies:
-
+🛠️ Tech Stack
+Java 17+
+Spring Boot
 Spring Web
+Spring Data JPA
+MySQL
+Maven
+🔥 Features Implemented
+✅ Controller delegates requests to the Service Layer
+✅ Service Layer handles business logic
+✅ Dependency Injection using @Autowired
+✅ REST API endpoints for CRUD operations
+✅ ResponseEntity used to return JSON responses
+✅ CURL Commands for testing
 
-Spring Boot DevTools
+🚀 Setup Instructions
+1️⃣ Spring Initializer Setup
+Use Spring Initializr with the following configurations:
 
-Implementation Details
+Project: Maven
+Language: Java
+Spring Boot Version: Latest Stable
+Dependencies: Spring Web, Spring Data JPA, MySQL Driver
+2️⃣ Database Configuration
+Modify application.properties:
 
-1️⃣ Create the Model (Contact.java)
+spring.datasource.url=jdbc:mysql://localhost:3306/addressbook_db  
+spring.datasource.username=root  
+spring.datasource.password=your_password  
+spring.jpa.hibernate.ddl-auto=update  
+spring.jpa.show-sql=true  
+3️⃣ Run the Application
 
-Represents the stored contact details.
+mvn spring-boot:run  
+🌍 REST API Endpoints
+Method	Endpoint	Description
+GET	/addressbook/service/contacts/get/all	Fetch all contacts
+GET	/addressbook/service/contacts/get/{id}	Fetch contact by ID
+POST	/addressbook/service/contacts/add	Add new contact
+PUT	/addressbook/service/contacts/update/{id}	Update contact by ID
+DELETE	/addressbook/service/contacts/delete/{id}	Delete contact by ID
+🖥️ CURL Commands for Testing
+📌 Get all contacts
 
-Fields: id, name, email, phone.
+curl -X GET http://localhost:8080/addressbook/service/contacts/get/all  
+📌 Get contact by ID
 
-Uses Getters and Setters instead of Lombok.
+curl -X GET http://localhost:8080/addressbook/service/contacts/get/1  
+📌 Add a new contact
 
-2️⃣ Create the DTO (ContactDTO.java)
+curl -X POST http://localhost:8080/addressbook/service/contacts/add \
+-H "Content-Type: application/json" \
+-d '{"name":"John Doe","email":"john.doe@example.com","phone":"9876543210"}'  
+📌 Update a contact
 
-Used for data transfer between layers.
+curl -X PUT http://localhost:8080/addressbook/service/contacts/update/1 \
+-H "Content-Type: application/json" \
+-d '{"name":"John Updated","email":"updated@example.com","phone":"9123456789"}'  
+📌 Delete a contact
 
-Fields: name, email, phone (excludes id).
-
-3️⃣ Create the Controller (DTOContactController.java)
-
-Implements REST APIs using ResponseEntity.
-
-Manages a list of Contact objects.
-
-API Endpoints and Testing (Using CURL)
-
-📌 Fetch All Contacts
-
-curl -X GET http://localhost:8080/addressbook/dto/contacts/get/all
-
-📌 Add a New Contact
-
-curl -X POST http://localhost:8080/addressbook/dto/contacts/add -H "Content-Type: application/json" -d '{"name":"John Doe","email":"john@example.com","phone":"1234567890"}'
-
-📌 Fetch a Contact by ID
-
-curl -X GET http://localhost:8080/addressbook/dto/contacts/get/1
-
-📌 Update a Contact
-
-curl -X PUT http://localhost:8080/addressbook/dto/contacts/update/1 -H "Content-Type: application/json" -d '{"name":"Jane Doe","email":"jane@example.com","phone":"9876543210"}'
-
-📌 Delete a Contact
-
-curl -X DELETE http://localhost:8080/addressbook/dto/contacts/delete/1
-
+curl -X DELETE http://localhost:8080/addressbook/service/contacts/delete/1  
+🎯 Summary
+In UC4, we have successfully introduced the Service Layer, making our application more structured and maintainable. The Controller now focuses only on handling requests and responses, while business logic is moved to the Service Layer.
