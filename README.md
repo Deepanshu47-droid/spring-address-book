@@ -1,39 +1,75 @@
-📖 Address Book App - UC6: Using Lombok for DTO
+📜 UC7: Logging with Lombok in Address Book
 
-📌 Objective
+📝 Overview
 
-In this use case, we integrate Lombok to auto-generate getters, setters, constructors, and other boilerplate code for our DTO (Data Transfer Object).
+In this use case, we integrate Lombok to simplify logging in the application. By using the @Slf4j annotation, we can enable logging without manually creating logger instances. The logging levels, file locations, and patterns are configured in the application.properties file based on the active profile (dev, staging, production).
 
 🔧 Steps to Implement
 
-1️⃣ Download and Install Lombok
+1️⃣ Add Lombok Dependency
 
-Eclipse/IntelliJ: Download the Lombok JAR and run it to integrate with the IDE.
+Ensure that Lombok is added to your pom.xml file:
 
-VS Code: Install the Lombok Extension.
+<dependency>
 
-2️⃣ Add Lombok Dependency to the pom.xml file to enable Lombok in the project.
+<groupId>org.projectlombok</groupId>
 
-3️⃣ Use Lombok Annotations in DTO and Model classes:
+<artifactId>lombok</artifactId>
 
-@Data – Generates getters, setters, toString(), equals(), and hashCode().
+<version>1.18.28</version>
 
-@AllArgsConstructor – Generates a constructor with all fields.
+<scope>provided</scope>
 
-@NoArgsConstructor – Generates a no-args constructor.
+</dependency>
 
-✅ Benefits of Using Lombok
+2️⃣ Install Lombok in IDE
 
-✅ Reduces Boilerplate Code – No need to write getters, setters, and constructors manually.
+Eclipse/IntelliJ: Download and run the Lombok JAR to install the plugin.
 
-✅ Improves Code Readability – Clean and concise DTO and Model classes.
+VS Code: Install the Lombok extension from the marketplace.
 
-✅ Easier Maintenance – Less code to modify when adding new fields.
+📂 Configuration
 
-🚀 Summary
+🌍 Define Active Profile
 
-✅ Lombok installed and configured.
+In the common application.properties, set the active profile:
 
-✅ DTO and Model classes now use Lombok annotations.
+spring.profiles.active=dev
 
-✅ Less boilerplate code, making the codebase cleaner and more maintainable.
+🏗 Create Profile-Specific Configurations
+
+application-dev.properties (for development)
+
+application-prod.properties (for production)
+
+Each profile file defines logging levels, file paths, and patterns.
+
+📌 Using Lombok for Logging
+
+Use the @Slf4j annotation in your classes to enable logging:
+
+🔍 Logging Levels
+
+Lombok logging supports different levels:
+
+log.info("Info message");
+log.debug("Debug message");
+log.error("Error message");
+
+The logging behavior (console or file output) depends on profile settings.
+
+✅ Testing
+
+After setting up, verify logs by running the application and checking the console or log files based on profile settings.
+
+🎯 Summary
+
+✔ Integrated Lombok for simplified logging
+
+✔ Used @Slf4j to avoid manual logger creation
+
+✔ Defined logging properties per environment
+
+✔ Configured application.properties to set logging behavior
+
+🚀 Now, logging is easy and efficient in our Address Book application!
