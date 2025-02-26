@@ -1,75 +1,119 @@
-📜 UC7: Logging with Lombok in Address Book
+UC8: Logging Configuration Based on Environment
 
-📝 Overview
+📌 Overview
 
-In this use case, we integrate Lombok to simplify logging in the application. By using the @Slf4j annotation, we can enable logging without manually creating logger instances. The logging levels, file locations, and patterns are configured in the application.properties file based on the active profile (dev, staging, production).
+This use case (UC8) focuses on setting up logging configurations for different environments (Development, Staging, and Production) using Spring Boot's application.properties. The goal is to control logging levels, output destinations (console or file), and patterns dynamically based on the active profile.
 
-🔧 Steps to Implement
+🛠 Steps to Implement Logging Based on Environment
 
-1️⃣ Add Lombok Dependency
+1️⃣ Add the Required Dependency in pom.xml
 
-Ensure that Lombok is added to your pom.xml file:
+Add the Spring Boot logging dependency to ensure proper logging configuration.
 
 <dependency>
-
-<groupId>org.projectlombok</groupId>
-
-<artifactId>lombok</artifactId>
-
-<version>1.18.28</version>
-
-<scope>provided</scope>
-
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-logging</artifactId>
 </dependency>
 
-2️⃣ Install Lombok in IDE
+2️⃣ Define the Active Profile in application.properties
 
-Eclipse/IntelliJ: Download and run the Lombok JAR to install the plugin.
+In the common application.properties file, specify the active profile as dev (default environment).
 
-VS Code: Install the Lombok extension from the marketplace.
-
-📂 Configuration
-
-🌍 Define Active Profile
-
-In the common application.properties, set the active profile:
+📍File: src/main/resources/application.properties
 
 spring.profiles.active=dev
 
-🏗 Create Profile-Specific Configurations
+This means the application will use application-dev.properties unless another profile (staging or prod) is specified.
 
-application-dev.properties (for development)
+3️⃣ Create Logging Configurations for Each Environment
 
-application-prod.properties (for production)
+🔹 Development (application-dev.properties)
 
-Each profile file defines logging levels, file paths, and patterns.
+📍 File: src/main/resources/application-dev.properties
 
-📌 Using Lombok for Logging
 
-Use the @Slf4j annotation in your classes to enable logging:
+# Log everything (for debugging)
 
-🔍 Logging Levels
+logging.level.root=DEBUG
 
-Lombok logging supports different levels:
+# Print logs to the console
 
-log.info("Info message");
-log.debug("Debug message");
-log.error("Error message");
+logging.file.name=logs/dev.log
 
-The logging behavior (console or file output) depends on profile settings.
+logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
 
-✅ Testing
+logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
 
-After setting up, verify logs by running the application and checking the console or log files based on profile settings.
+🔹 Staging (application-staging.properties)
 
-🎯 Summary
+📍 File: src/main/resources/application-staging.properties
 
-✔ Integrated Lombok for simplified logging
 
-✔ Used @Slf4j to avoid manual logger creation
 
-✔ Defined logging properties per environment
+# Only log WARN and higher (to reduce noise)
 
-✔ Configured application.properties to set logging behavior
+logging.level.root=WARN
 
-🚀 Now, logging is easy and efficient in our Address Book application!
+# Write logs to a staging log file
+
+logging.file.name=logs/staging.log
+
+logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+
+🔹 Production (application-prod.properties)
+
+📍 File: src/main/resources/application-prod.properties
+
+
+# Log only ERROR level messages
+
+logging.level.root=ERROR
+
+# Write logs to a production log file
+
+logging.file.name=logs/prod.log
+
+logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+
+4️⃣ Use Lombok for Logging
+
+In your Spring Boot service and controllers, use Lombok's @Slf4j annotation for logging.
+
+
+Example Usage in a Service Class
+
+📍 File: src/main/java/com/addressbook/service/ContactService.java
+
+5️⃣ Running the Application with Different Profiles
+
+To run the application with a specific profile, use:
+
+For Development Mode:
+
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+
+For Staging Mode:
+
+mvn spring-boot:run -Dspring-boot.run.profiles=staging
+
+For Production Mode:
+
+mvn spring-boot:run -Dspring-boot.run.profiles=prod
+
+Alternatively, you can set the profile in IDE (IntelliJ, Eclipse, VS Code) by adding:
+
+-Dspring.profiles.active=prod
+
+in the Run Configurations → VM Options.
+
+📌 Summary
+
+Configured logging levels dynamically for Dev, Staging, and Prod.
+
+Used Lombok's @Slf4j for clean logging.
+
+Separated environment-specific properties into different application-*.properties files.
+
+Allowed switching environments using spring.profiles.active.
+
+This setup ensures logs are filtered and stored correctly based on the environment, improving debugging and monitoring in production! 🚀
