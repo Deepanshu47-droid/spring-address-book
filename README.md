@@ -1,6 +1,4 @@
-📖 Address Book App - UC6
-
-🚀 Use Case 6: Using Lombok for DTO
+📖 Address Book App - UC6: Using Lombok for DTO
 
 📌 Objective
 
