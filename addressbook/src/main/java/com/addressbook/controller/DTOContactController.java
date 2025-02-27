@@ -2,6 +2,7 @@ package com.addressbook.controller;
 
 import com.addressbook.dto.ContactDTO;
 import com.addressbook.model.Contact;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class DTOContactController {
     }
 
     @PostMapping("/contacts/add")
-    public ResponseEntity<String> addContact(@RequestBody ContactDTO contactDTO) {
+    public ResponseEntity<String> addContact(@Valid @RequestBody ContactDTO contactDTO) {
         Contact newContact = new Contact((long) (contacts.size() + 1), contactDTO.getName(), contactDTO.getEmail(), contactDTO.getPhone());
         contacts.add(newContact);
         log.info("New contact added: {}", newContact);
@@ -42,7 +43,7 @@ public class DTOContactController {
     }
 
     @PutMapping("/contacts/update/{id}")
-    public ResponseEntity<String> updateContact(@PathVariable Long id, @RequestBody ContactDTO contactDTO) {
+    public ResponseEntity<String> updateContact(@PathVariable Long id, @Valid @RequestBody ContactDTO contactDTO) {
         for (Contact contact : contacts) {
             log.info("Updating contact with ID: {}", id);
             if (contact.getId().equals(id)) {

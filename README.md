@@ -1,119 +1,71 @@
-UC8: Logging Configuration Based on Environment
+📌 UC10: Add Validation to Name Field
 
-📌 Overview
+🚀 Objective
 
-This use case (UC8) focuses on setting up logging configurations for different environments (Development, Staging, and Production) using Spring Boot's application.properties. The goal is to control logging levels, output destinations (console or file), and patterns dynamically based on the active profile.
+Ensure the name field in the ContactDTO is mandatory.
 
-🛠 Steps to Implement Logging Based on Environment
+Add pattern validation so only letters and spaces are allowed.
 
-1️⃣ Add the Required Dependency in pom.xml
+Validation should apply to both Create (POST) and Update (PUT) REST Calls.
 
-Add the Spring Boot logging dependency to ensure proper logging configuration.
+🛠 Implementation Steps
 
-<dependency>
-<groupId>org.springframework.boot</groupId>
-<artifactId>spring-boot-starter-logging</artifactId>
-</dependency>
+1️⃣ Add Validation to ContactDTO
 
-2️⃣ Define the Active Profile in application.properties
+2️⃣ Modify Controller to Handle Validation Errors
 
-In the common application.properties file, specify the active profile as dev (default environment).
+3️⃣ Enable Detailed Error Messages in application.properties
 
-📍File: src/main/resources/application.properties
+server.error.include-message=always
 
-spring.profiles.active=dev
+server.error.include-binding-errors=always
 
-This means the application will use application-dev.properties unless another profile (staging or prod) is specified.
+✅ Testing the API
 
-3️⃣ Create Logging Configurations for Each Environment
+🔹 Valid Input (Should Succeed)
 
-🔹 Development (application-dev.properties)
+📌 POST /addressbook/database/contacts/add
 
-📍 File: src/main/resources/application-dev.properties
+{
+"name": "Deepanshu malviya",
+"email": "Deepannshu@email.com",
+"phone": "9876543210"
+}
 
+✅ Response (200 OK)
 
-# Log everything (for debugging)
+{
+"message": "Contact added successfully!"
+}
 
-logging.level.root=DEBUG
+🔹 Invalid Input (Should Fail)
 
-# Print logs to the console
+📌 POST /addressbook/database/contacts/add
 
-logging.file.name=logs/dev.log
+{
+"name": "Deep123",
+"email": "deep@gmail.com",
+"phone": "98765943940"
+}
 
-logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+❌ Response (400 Bad Request)
 
-logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+{
+"status": 400,
+"error": "Bad Request",
+"message": "Name must contain only letters"
+}
 
-🔹 Staging (application-staging.properties)
+🎯 Expected Outcome
 
-📍 File: src/main/resources/application-staging.properties
+If the name field is empty, it will return "Name cannot be empty".
 
+If the name contains numbers or special characters, it will return "Name must contain only letters".
 
+🛠 Commands to Run the Project
 
-# Only log WARN and higher (to reduce noise)
+Run Application
 
-logging.level.root=WARN
+mvn clean spring-boot:run
 
-# Write logs to a staging log file
-
-logging.file.name=logs/staging.log
-
-logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
-
-🔹 Production (application-prod.properties)
-
-📍 File: src/main/resources/application-prod.properties
-
-
-# Log only ERROR level messages
-
-logging.level.root=ERROR
-
-# Write logs to a production log file
-
-logging.file.name=logs/prod.log
-
-logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
-
-4️⃣ Use Lombok for Logging
-
-In your Spring Boot service and controllers, use Lombok's @Slf4j annotation for logging.
-
-
-Example Usage in a Service Class
-
-📍 File: src/main/java/com/addressbook/service/ContactService.java
-
-5️⃣ Running the Application with Different Profiles
-
-To run the application with a specific profile, use:
-
-For Development Mode:
-
-mvn spring-boot:run -Dspring-boot.run.profiles=dev
-
-For Staging Mode:
-
-mvn spring-boot:run -Dspring-boot.run.profiles=staging
-
-For Production Mode:
-
-mvn spring-boot:run -Dspring-boot.run.profiles=prod
-
-Alternatively, you can set the profile in IDE (IntelliJ, Eclipse, VS Code) by adding:
-
--Dspring.profiles.active=prod
-
-in the Run Configurations → VM Options.
-
-📌 Summary
-
-Configured logging levels dynamically for Dev, Staging, and Prod.
-
-Used Lombok's @Slf4j for clean logging.
-
-Separated environment-specific properties into different application-*.properties files.
-
-Allowed switching environments using spring.profiles.active.
-
-This setup ensures logs are filtered and stored correctly based on the environment, improving debugging and monitoring in production! 🚀
+Test API Using Postman or CURL
