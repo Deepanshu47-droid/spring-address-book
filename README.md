@@ -1,71 +1,36 @@
-📌 UC10: Add Validation to Name Field
+UC11 - User-Friendly Error Response for Validation Failures
 
-🚀 Objective
+Overview
 
-Ensure the name field in the ContactDTO is mandatory.
+In this use case, we enhance error handling by creating a centralized exception handling class using @ControllerAdvice. This ensures that validation errors return structured, user-friendly error messages instead of generic responses.
 
-Add pattern validation so only letters and spaces are allowed.
+Steps to Implement
 
-Validation should apply to both Create (POST) and Update (PUT) REST Calls.
+Create Exception Handler Class
 
-🛠 Implementation Steps
+   Create a new class named GlobalExceptionHandler in the com.addressbook.exception package.
 
-1️⃣ Add Validation to ContactDTO
+   Annotate it with @ControllerAdvice to handle exceptions globally.
 
-2️⃣ Modify Controller to Handle Validation Errors
+Handle Validation Errors
 
-3️⃣ Enable Detailed Error Messages in application.properties
+   Implement an @ExceptionHandler for MethodArgumentNotValidException to handle validation failures.
+   Extract meaningful error messages from the exception and return them in a structured response.
 
-server.error.include-message=always
+Modify the Controller to Enforce Validation
 
-server.error.include-binding-errors=always
+   Ensure that DTO classes (like ContactDTO) contain validation annotations such as @NotEmpty and @Pattern.
 
-✅ Testing the API
+   The controller should use @Valid before @RequestBody to trigger validation.
 
-🔹 Valid Input (Should Succeed)
+Update Controller to Use Validation
 
-📌 POST /addressbook/database/contacts/add
+Expected Error Response for Invalid Input
 
-{
-"name": "Deepanshu malviya",
-"email": "Deepannshu@email.com",
-"phone": "9876543210"
-}
+When a request contains invalid data (e.g., an empty name field), the API returns:
 
-✅ Response (200 OK)
 
 {
-"message": "Contact added successfully!"
+"name": "Name cannot be empty",
+"email": "Email cannot be empty"
 }
-
-🔹 Invalid Input (Should Fail)
-
-📌 POST /addressbook/database/contacts/add
-
-{
-"name": "Deep123",
-"email": "deep@gmail.com",
-"phone": "98765943940"
-}
-
-❌ Response (400 Bad Request)
-
-{
-"status": 400,
-"error": "Bad Request",
-"message": "Name must contain only letters"
-}
-
-🎯 Expected Outcome
-
-If the name field is empty, it will return "Name cannot be empty".
-
-If the name contains numbers or special characters, it will return "Name must contain only letters".
-
-🛠 Commands to Run the Project
-
-Run Application
-
-mvn clean spring-boot:run
-
-Test API Using Postman or CURL
